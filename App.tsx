@@ -1,73 +1,106 @@
 import React, { Component } from 'react';
-import { Text, TextInput, View, Button, Alert } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { TextInput, Button,  } from 'react-native-paper';
 
-
-
-interface PersonProps {
-  firstname: string;
-  lastname: string;
-  age: string;
+interface calcStates {
+  weight: string,
+  height: string,
+  value: string
 }
 
-class Person extends Component<PersonProps> {
-  render() {
-    if (this.props.firstname == '' || this.props.lastname == '' || this.props.age == '') {
-      return null;
-    }
-    return(
-    <View style={{alignItems: 'center'}}>
-      <Text>Firstname: {this.props.firstname}</Text>
-      <Text>Lastname: {this.props.lastname}</Text>
-      <Text>Age: {this.props.age}</Text>
-    </View>
-    )
-  }
-}
-
-
-interface PersonTestState {
-  firstname: string;
-  lastname: string;
-  age: string;
-}
-
-
-export default class Persontest extends Component<{},PersonTestState> {
-  constructor(props) {
+export default class MyComponent extends Component<{},calcStates> {
+  constructor(props){
     super(props);
     this.state = {
-      firstname: '',
-      lastname: '',
-      age: '',
-  };
+      weight: '',
+      height: '',
+      value: ''
+    };
+    this.calculate = this.calculate.bind(this);
+  }
+
+  calculate() {
+
+    let weight = parseFloat(this.state.weight.replace(',', '.'));
+    let height = parseFloat(this.state.height.replace(',', '.'));
+    let value = (weight / (height**2)).toFixed(1);
+    this.setState({value});
   }
 
   render() {
     return (
-      <View style={{flex: 1, justifyContent: 'center', padding: 20}}>
-        <Text style={{paddingBottom: 10, fontSize: 20}}>
-          Type your data
+      <View style={styles.container}>
+        <Text
+            style={{
+              justifyContent: "center",
+              alignSelf: "center",
+              marginTop: 40,
+              marginBottom: 20,
+              fontSize: 50
+            }}>
+            BMI Calculator
         </Text>
         <TextInput
-          style={{height: 80}}
-          placeholder="Firstname"
-          onChangeText={(firstname) => this.setState({firstname})}
-          value={this.state.firstname}
+          style={styles.input}
+          label='Weight'
+          placeholder="kg"
+          value={this.state.weight}
+          keyboardType='numeric'
+          onChangeText={weight => this.setState({ weight })}
         />
         <TextInput
-          style={{height: 80}}
-          placeholder="Lastname"
-          onChangeText={(lastname) => this.setState({lastname})}
-          value={this.state.lastname}
+          style={styles.input}
+          label='Height'
+          placeholder="m"
+          value={this.state.height}
+          keyboardType='numeric'
+          onChangeText={height => this.setState({ height })}
         />
-        <TextInput
-          style={{height: 80}}
-          placeholder="Age"
-          onChangeText={(age) => this.setState({age})}
-          value={this.state.age}
-        />
-        <Person firstname={this.state.firstname} lastname={this.state.lastname} age={this.state.age}/>
+        <Button 
+          style={styles.button}
+          mode="contained"
+          onPress={this.calculate}>
+          <Text style={styles.buttonText}>
+            calculate
+          </Text>
+        </Button>
+        <Text style={styles.result}>
+            {this.state.value}
+        </Text>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  input: {
+    alignSelf: "center",
+    height: 80,
+    textAlign: "center",
+    width: "80%",
+    fontSize: 40,
+    marginTop: 30,
+    color: "#FFCB1F"
+  },
+  button: {
+    marginTop: 50,
+    width: "80%",
+    alignSelf: "center",
+    textAlign: "center",
+    fontSize: 70,
+  },
+  buttonText: {
+    alignSelf: "center",
+    padding: 30,
+    fontSize: 40,
+  },
+  result: {
+    marginTop: 30,
+    alignSelf: "center",
+    fontSize: 65,
+    padding: 15
+  }
+});
