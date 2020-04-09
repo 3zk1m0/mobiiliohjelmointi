@@ -81,8 +81,8 @@ fetchWeather(lat, lon) {
 render(){
   if(this.state.error){
     return( 
-      <View style={styles.loader}> 
-        <ActivityIndicator size="large" color="#0c9"/>
+      <View style={{alignContent: "center", justifyContent: "center"}}> 
+        <Text>GPS not working</Text>
       </View>
   )}
 
